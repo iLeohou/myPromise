@@ -69,3 +69,9 @@ html文件自动引入了bundle.js。这都是HtmlWebpackPlugin的功劳。**他
 11. ### chunksSortMode
     > 不太懂，日后再说
 
+
+
+
+### 实践
+
+不应该再在html里面去主动引入js文件了，这样的话可能会造成双重引入，并且public这个蛋疼的选项还会受到奇奇怪怪的干扰，所以我们就保持其的script标签简洁。

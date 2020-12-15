@@ -61,7 +61,7 @@ hot和inline应该是要共同去作用才会有所效果。
 
 webpack-dev-serve有两种方式可以实现自动刷新和HMR。
 
-- iframe模式（默认）
+- iframe模式（旧版本默认，新版本好像已经移除）
 没什么特殊的，将html页面嵌入iframe内，并在模块变化的时候重载页面
 - inline模式
 ```js
@@ -82,6 +82,19 @@ entry:{
 ```
 
 #### 其他选项。。。
+
+### 聊一聊inline与iframe模式下的区别
+我们知道，webpack-dev-server开启服务后，会与客户端建立好连接。
+那么我们在启动客户端的时候，仅仅是只打开了index.html吗？不是的，仅仅是打开index.html不会有那么多有用的功能。比如socket连接的库，就不可能存在。所以在webpack-dev-server开启服务后，很明显，他会将一个特殊的js注入到index.html内，使其能够连接上ws与服务端通信，所以这就有了两种注入js的方式--iframe，--inline。
+
+--iframe就简单了，就是在外层的文件下，特殊js作用，这个特殊js完成与服务端通信，开启iframe，刷新iframe等等的活动。那么我们的应用文件就是注入到了iframe内的。
+
+>本质上是加载了live.bundle.js文件，其不但创建了iframe标签，同时包含socket.io的client代码，以和webpack-dev-server进行websocket通讯，从而完成自动编译打包、页面自动刷新的功能。
+
+
+--inline又是另外一种实现方式了，他通过入口数组的方式，直接将这个特殊的js文件混入我们开发的js文件内，上述的功能，包括开启ws，刷新等等。
+
+网上教程大多是旧版本的，新版本怎么实现细节未知，等未来开发需要使用的时候再来完善。看样子好像已经去除了ifranme模式了。可以去`http://localhost:8080/webpack-dev-server.js`查询其自动生成的代码。
 
 
 
